@@ -1,0 +1,86 @@
+graph LR
+    %% Color definitions for analogous purple scheme
+    %% Deep Blue-Purple (#2A1B3D)
+    %% Royal Purple (#44318D)
+    %% Lavender Purple (#8B4AA0)
+    %% Light Purple-Pink (#A98AB0)
+
+    subgraph VMs[Virtual Machines]
+        direction LR
+        
+        subgraph ManagementVM[Management VM]
+            direction TB
+            style ManagementVM fill:#2A1B3D,stroke:#44318D
+            DataLogging & DataStorage & SystemTime & PlatformConfig & SystemHealth & Attestation & ZeroTrust
+            RTOS1[RTOS KERNEL]
+        end
+
+        subgraph IOVM[IO VM]
+            direction TB
+            style IOVM fill:#44318D,stroke:#8B4AA0
+            IOService & ISS3Service & CANBusService & TSNTTEService
+            RTOS2[RTOS KERNEL]
+        end
+
+        subgraph AppsVM[Apps VM]
+            direction TB
+            style AppsVM fill:#8B4AA0,stroke:#A98AB0
+            
+            subgraph TopLayer
+                direction LR
+                C2Payload --- CommsMgr --- HandoverMgr
+                BMS --- MissionPlan --- AIMLC2
+            end
+            
+            subgraph BottomLayer
+                direction LR
+                OMS --- ROSM --- FACE --- Proxy
+            end
+            
+            KERNEL1[KERNEL]
+        end
+
+        subgraph GPUVM[GPU VM]
+            direction TB
+            style GPUVM fill:#A98AB0,stroke:#2A1B3D
+            AIMLApp1 & AIMLApp2 & AIMLApp3
+            KERNEL2[KERNEL]
+        end
+    end
+
+    %% VirtBus connections
+    VirtBus1[VirtBus]
+    VirtBus2[VirtBus]
+    
+    %% Hardware Layer with special styling
+    subgraph Hardware
+        direction TB
+        style Hardware fill:#2A1B3D,stroke-dasharray: 5 5
+        PCIe & Ethernet
+        SBC[SBC - x86 Intel / ARM]
+        GPU[Nvidia or AMD GPU]
+        SecureBoot[Secure / Trusted Boot]
+    end
+
+    %% Hypervisor with configurations
+    subgraph Hypervisor
+        direction LR
+        style Hypervisor fill:#44318D,stroke-dasharray: 3 3
+        ResourceConfig --- ScheduleConfig
+    end
+
+    %% Connections with different line styles
+    Hardware ==> Hypervisor
+    Hypervisor -.-> ManagementVM
+    Hypervisor -.-> IOVM
+    Hypervisor -.-> AppsVM
+    Hypervisor -.-> GPUVM
+
+    %% Style classes for components
+    classDef kernel fill:#2A1B3D,stroke:#44318D,color:white
+    classDef component fill:#8B4AA0,stroke:#A98AB0,color:white
+    classDef virtbus fill:#A98AB0,stroke-dasharray: 5 5
+
+    %% Apply styles
+    class RTOS1,RTOS2,KERNEL1,KERNEL2 kernel
+    class VirtBus1,VirtBus2 virtbus

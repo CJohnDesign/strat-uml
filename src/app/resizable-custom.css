@@ -1,0 +1,26 @@
+/* Custom styles to remove the resizable divider */
+
+/* Target the divider handle and its pseudo-elements to hide them */
+.no-divider {
+  background: transparent !important;
+  width: 1px !important;
+}
+
+.no-divider::before,
+.no-divider::after {
+  display: none !important;
+  content: none !important;
+  background: transparent !important;
+  border: none !important;
+  width: 0 !important;
+}
+
+/* Hide hover states */
+.no-divider:hover {
+  background: transparent !important;
+}
+
+/* In case there's an active state */
+.no-divider:active {
+  background: transparent !important;
+} 

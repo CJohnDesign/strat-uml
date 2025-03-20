@@ -1,0 +1,138 @@
+classDiagram
+    class ParryLabsAnd3PHW {
+        Parry Labs and 3P HW
+    }
+
+    class HypervisorType2 {
+        Hypervisor (Type 2)
+    }
+    ParryLabsAnd3PHW *-- HypervisorType2
+
+    class UbuntuJetpack {
+        Ubuntu 22.0+ / Jetpack
+    }
+    HypervisorType2 *-- UbuntuJetpack
+
+    class GPUAccelerated {
+        GPU Accelerated
+    }
+    class VideoTranscode {
+        Video Transcode
+    }
+    GPUAccelerated *-- VideoTranscode
+    UbuntuJetpack *-- GPUAccelerated
+
+    class HypervisorType1 {
+        Hypervisor (Type 1)
+    }
+    ParryLabsAnd3PHW *-- HypervisorType1
+
+    class UbuntuPlus {
+        Ubuntu 22.0+
+    }
+    HypervisorType1 *-- UbuntuPlus
+
+    class GCIACore {
+        GCIA Core
+    }
+    class GCIA {
+        GCIA
+    }
+    class Cyber {
+        Cyber
+    }
+    GCIACore *-- GCIA
+    GCIACore *-- Cyber
+    UbuntuPlus *-- GCIACore
+
+    class IO {
+        I/O
+    }
+    class IOPs {
+        IOPs
+    }
+    class ROS {
+        ROS
+    }
+    IO *-- IOPs
+    IO *-- ROS
+    UbuntuPlus *-- IO
+
+    class CoP {
+        CoP
+    }
+    class Map {
+        Map
+    }
+    class TAK {
+        TAK
+    }
+    class UVC {
+        UVC
+    }
+    CoP *-- Map
+    CoP *-- TAK
+    CoP *-- UVC
+    UbuntuPlus *-- CoP
+
+    class VoIP {
+        VoIP
+    }
+    class VoIP_TBD {
+        TBD
+    }
+    VoIP *-- VoIP_TBD
+    UbuntuPlus *-- VoIP
+
+    class SensorFusion {
+        Sensor Fusion
+    }
+    class SF_TBD {
+        TBD
+    }
+    SensorFusion *-- SF_TBD
+    UbuntuPlus *-- SensorFusion
+
+    class Docs {
+        Docs
+    }
+    class ManualRepo {
+        Manual Repo
+    }
+    Docs *-- ManualRepo
+    UbuntuPlus *-- Docs
+
+    class RadioControl {
+        Radio Control
+    }
+    class MLCPRM {
+        MLCP-RM
+    }
+    RadioControl *-- MLCPRM
+    UbuntuPlus *-- RadioControl
+
+    class UnlimitedAccess {
+        Unlimited Access
+    }
+    class Logger {
+        Logger
+    }
+    UnlimitedAccess *-- Logger
+    UbuntuPlus *-- UnlimitedAccess
+
+    class SmartRouting {
+        Smart Routing
+    }
+    class ModRF {
+        ModRF
+    }
+    class Velocio {
+        Velocio
+    }
+    class Other {
+        Other
+    }
+    SmartRouting *-- ModRF
+    SmartRouting *-- Velocio
+    SmartRouting *-- Other
+    UbuntuPlus *-- SmartRouting

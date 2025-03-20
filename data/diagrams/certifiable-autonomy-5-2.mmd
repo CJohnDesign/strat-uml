@@ -1,0 +1,99 @@
+graph TB
+    %% Color definitions for analogous purple scheme
+    %% Deep Blue-Purple (#2A1B3D)
+    %% Royal Purple (#44318D)
+    %% Lavender Purple (#8B4AA0)
+    %% Light Purple-Pink (#A98AB0)
+
+    %% Main VM containers
+    subgraph ManagementVM[Management VM]
+        direction TB
+        style ManagementVM fill:#2A1B3D,stroke:#44318D
+        DataLogging[Data Logging]
+        DataStorage[Data Storage]
+        SystemTime[System Time]
+        PlatformConfig[Platform Configuration]
+        SystemHealth[System Health]
+        Attestation[Attestation]
+        ZeroTrust[Zero Trust Policy]
+        RTOS1[RTOS KERNEL]
+    end
+
+    subgraph IOVM[IO VM]
+        direction TB
+        style IOVM fill:#44318D,stroke:#8B4AA0
+        IOService[IO Service]
+        ISS3[ISS3 Service]
+        CANBus[CAN Bus Service]
+        TSNTTE[TSN/TTE Service]
+        RTOS2[RTOS KERNEL]
+    end
+
+    subgraph AppsVM[Apps VM]
+        direction TB
+        style AppsVM fill:#8B4AA0,stroke:#A98AB0
+        
+        subgraph TopApps
+            direction LR
+            C2Payload[C2 Payload] --- CommsMgr[Comms Mgr] --- HandoverMgr[Handover Mgr]
+            BMS[BMS] --- MissionPlan[Mission Plan] --- AIMLC2[AI/ML C2]
+        end
+        
+        subgraph BottomApps
+            direction LR
+            OMS --- ROSM --- FACE --- Proxy
+        end
+        
+        KERNEL1[KERNEL]
+    end
+
+    subgraph GPUVM[GPU VM]
+        direction TB
+        style GPUVM fill:#A98AB0,stroke:#2A1B3D
+        AIMLApp1[AI/ML App 1]
+        AIMLApp2[AI/ML App 2]
+        AIMLApp3[AI/ML App 3]
+        KERNEL2[KERNEL]
+    end
+
+    %% VirtBus Layer
+    VirtBus[VirtBus]
+    style VirtBus fill:#A98AB0,stroke-dasharray: 5 5
+
+    %% Hypervisor Layer
+    subgraph HypervisorLayer[Hypervisor]
+        direction LR
+        style HypervisorLayer fill:#44318D,stroke-dasharray: 3 3
+        ResourceConfig[Resource Configuration] --- ScheduleConfig[Schedule Configuration]
+        HypervisorText[Hypervisor]
+    end
+
+    %% Hardware Layer
+    subgraph Hardware
+        direction LR
+        style Hardware fill:#2A1B3D,stroke-dasharray: 5 5
+        SecureBoot[Secure/Trusted Boot]
+        SBC[SBC - GPU]
+    end
+
+    %% Style definitions
+    classDef kernel fill:#2A1B3D,stroke:#44318D,color:white
+    classDef component fill:#8B4AA0,stroke:#A98AB0,color:white
+    classDef config fill:#44318D,stroke:#8B4AA0,color:white
+
+    %% Apply styles
+    class RTOS1,RTOS2,KERNEL1,KERNEL2 kernel
+    class ResourceConfig,ScheduleConfig config
+    class DataLogging,DataStorage,SystemTime,PlatformConfig,SystemHealth,Attestation,ZeroTrust component
+    class IOService,ISS3,CANBus,TSNTTE component
+    class C2Payload,CommsMgr,HandoverMgr,BMS,MissionPlan,AIMLC2 component
+    class OMS,ROSM,FACE,Proxy component
+    class AIMLApp1,AIMLApp2,AIMLApp3 component
+
+    %% Connections
+    Hardware --> HypervisorLayer
+    HypervisorLayer --> VirtBus
+    VirtBus --> ManagementVM
+    VirtBus --> IOVM
+    VirtBus --> AppsVM
+    VirtBus --> GPUVM

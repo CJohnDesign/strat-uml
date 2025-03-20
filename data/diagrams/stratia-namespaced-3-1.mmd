@@ -1,0 +1,147 @@
+classDiagram
+    direction TB
+
+    %% Top level
+    class System {
+        +name: String
+        +deploymentTypes: List
+        +hardwareTypes: List
+        +hypervisors: List
+        +securityPolicies: List
+    }
+
+    %% Second level
+    class Deployment {
+        +types: List
+        +partitions: List
+        +complianceStandards: List
+        +networkingConstraints: List
+    }
+
+    %% Third level - Main components
+    class DeploymentType {
+        +name: String
+        +defaultPartitions: List
+        +complianceStandards: List
+        +networkingConstraints: String
+    }
+
+    class OTAUpdate {
+        +version: String
+        +appliesTo: List
+        +rollbackOption: Boolean
+        +status: String
+    }
+
+    class Hardware {
+        +processor: String
+        +supportedHypervisors: List
+    }
+
+    class Partition {
+        +name: String
+        +type: PartitionType
+        +allocatedResources: ResourceAllocation
+        +OS: OperatingSystem
+        +networkingPolicies: List
+        +containers: List
+        +VMs: List
+    }
+
+    %% Fourth level
+    class PartitionType {
+        +name: String
+        +complianceStandards: List
+        +defaultOS: List
+    }
+
+    class Networking {
+        +networkTopology: String
+        +allowedConnections: List
+        +externalProtocols: List
+        +messageRouting: String
+    }
+
+    class Container {
+        +name: String
+        +image: String
+        +resourceNeeds: ResourceAllocation
+        +networkDependencies: List
+        +securityPolicies: List
+        +configFiles: List
+    }
+
+    class VM {
+        +name: String
+        +OS: OperatingSystem
+        +resourceAllocation: ResourceAllocation
+        +securityPolicies: List
+    }
+
+    %% Bottom level components
+    class Compliance {
+        +FACE: Boolean
+        +SafetyCritical: Boolean
+        +MissionCritical: Boolean
+    }
+
+    class ResourceAllocation {
+        +CPU: String
+        +Memory: String
+        +Storage: String
+    }
+
+    class SecurityPolicy {
+        +RBAC: Boolean
+        +ZeroTrustEnabled: Boolean
+        +Encryption: Boolean
+    }
+
+    class Hypervisor {
+        +name: String
+        +supportedOS: List
+    }
+
+    class OperatingSystem {
+        +name: String
+        +version: String
+        +architecture: String
+    }
+
+    %% System level relationships
+    System "1" -- "many" Deployment : Manages
+    System "1" -- "many" SecurityPolicy : Has
+
+    %% Deployment level relationships
+    Deployment "1" -- "1" DeploymentType : Uses
+    Deployment "1" -- "many" Partition : Contains
+    Deployment "1" -- "many" OTAUpdate : Supports
+    Deployment "1" -- "1" Hardware : "Runs On"
+
+    %% Partition relationships
+    Partition "1" -- "many" Networking : Uses
+    Partition "1" -- "many" Container : Hosts
+    Partition "1" -- "many" VM : Hosts
+    Partition "1" -- "1" ResourceAllocation : Allocates
+    Partition "1" -- "1" PartitionType : Defines
+    Partition "1" -- "1" OperatingSystem : Uses
+
+    %% PartitionType relationships
+    PartitionType "1" -- "many" Compliance : "Must Meet"
+
+    %% Container relationships
+    Container "1" -- "1" ResourceAllocation : Allocates
+    Container "1" -- "many" Networking : Uses
+
+    %% VM relationships
+    VM "1" -- "many" SecurityPolicy : Enforces
+    VM "1" -- "1" Hypervisor : "Runs On"
+    VM "1" -- "1" ResourceAllocation : Allocates
+    VM "1" -- "1" OperatingSystem : Uses
+    OTAUpdate "1" -- "many" VM : Updates
+
+    %% Hardware relationships
+    Hardware "1" -- "many" Hypervisor : Supports
+
+    %% Hypervisor relationships
+    Hypervisor "1" -- "many" OperatingSystem : Supports
