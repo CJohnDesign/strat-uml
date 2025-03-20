@@ -62,9 +62,9 @@ export default function Home() {
 
   const handleDiagramChange = async (diagramId: string) => {
     try {
-      const response = await fetch(`/api/diagrams/${diagramId}`)
-      const data = await response.text()
-      setUmlText(data)
+      const response = await fetch(`/api/diagrams?id=${diagramId}`)
+      const data = await response.json()
+      setUmlText(data.content)
       setActiveDiagram(diagramId)
     } catch (error) {
       console.error('Failed to load diagram:', error)
