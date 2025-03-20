@@ -1,13 +1,14 @@
 /* Custom styles to remove the resizable divider */
 
-/* Target the divider handle and its pseudo-elements to hide them */
+/* Custom styles for the resizable divider */
 .no-divider {
   background: transparent !important;
   width: 1px !important;
+  display: block !important;
+  position: relative !important;
 }
 
-.no-divider::before,
-.no-divider::after {
+.no-divider::before {
   display: none !important;
   content: none !important;
   background: transparent !important;
@@ -15,12 +16,64 @@
   width: 0 !important;
 }
 
+/* Override the base component's after styles */
+[data-slot="resizable-handle"].no-divider::after {
+  content: "" !important;
+  position: absolute !important;
+  display: block !important;
+  background: hsl(var(--border) / 0.1) !important;
+  width: 1px !important;
+  height: 100% !important;
+  left: 0 !important;
+  transform: none !important;
+  transition: background-color 0.15s ease !important;
+}
+
 /* Hide hover states */
-.no-divider:hover {
-  background: transparent !important;
+.no-divider:hover::after {
+  background: hsl(var(--border) / 0.1) !important;
 }
 
 /* In case there's an active state */
-.no-divider:active {
-  background: transparent !important;
+.no-divider:active::after {
+  background: hsl(var(--border) / 0.1) !important;
+}
+
+/* Responsive styles for panel group */
+@media (min-width: 1024px) {
+  [data-panel-group-direction="vertical"] {
+    flex-direction: row !important;
+  }
+
+  [data-panel-group-direction="vertical"] .no-divider {
+    width: 1px !important;
+    height: auto !important;
+  }
+
+  [data-panel-group-direction="vertical"] [data-slot="resizable-handle"].no-divider::after {
+    width: 1px !important;
+    height: 100% !important;
+    left: 0 !important;
+    top: 0 !important;
+    transform: none !important;
+  }
+}
+
+@media (max-width: 1023px) {
+  [data-panel-group-direction="vertical"] {
+    flex-direction: column !important;
+  }
+
+  [data-panel-group-direction="vertical"] .no-divider {
+    height: 1px !important;
+    width: auto !important;
+  }
+
+  [data-panel-group-direction="vertical"] [data-slot="resizable-handle"].no-divider::after {
+    width: 100% !important;
+    height: 1px !important;
+    left: 0 !important;
+    top: 0 !important;
+    transform: none !important;
+  }
 } 

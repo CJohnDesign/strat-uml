@@ -220,13 +220,14 @@ export default function Home() {
       />
       <main className="flex-1 w-full relative">
         <ResizablePanelGroup
-          direction="horizontal"
-          className="h-full w-full"
+          direction="vertical"
+          className="h-full w-full lg:flex-row [&[data-panel-group-direction=vertical]]:flex-col lg:[&[data-panel-group-direction=vertical]]:flex-row"
         >
           <ResizablePanel 
             defaultSize={30} 
             minSize={20}
             maxSize={50}
+            className="order-2 lg:order-1"
           >
             <div className="flex flex-col h-full">
               <div className="flex flex-1 items-center justify-center p-4">
@@ -242,7 +243,10 @@ export default function Home() {
           
           <ResizableHandle className="no-divider" />
           
-          <ResizablePanel defaultSize={70}>
+          <ResizablePanel 
+            defaultSize={70}
+            className="order-1 lg:order-2"
+          >
             <div className="flex h-full items-center justify-center p-4">
               <div ref={svgContainerRef} className="h-full w-full overflow-auto">
                 <MermaidRenderer diagram={umlText} />
