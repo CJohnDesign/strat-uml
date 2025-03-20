@@ -86,10 +86,18 @@ export function MermaidRenderer({ diagram }: MermaidRendererProps) {
     container.addEventListener('touchmove', handleTouchMove, { passive: false });
     container.addEventListener('wheel', handleWheel, { passive: false });
 
+    // Add event listener for touch events
+    document.addEventListener('touchstart', preventBrowserZoom, { passive: false });
+
     return () => {
       container.removeEventListener('touchstart', handleTouchStart);
       container.removeEventListener('touchmove', handleTouchMove);
       container.removeEventListener('wheel', handleWheel);
+      document.removeEventListener('touchstart', preventBrowserZoom);
+      if (panzoomRef.current) {
+        panzoomRef.current.destroy();
+        panzoomRef.current = null;
+      }
     };
   }, []);
 

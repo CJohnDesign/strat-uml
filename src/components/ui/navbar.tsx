@@ -1,7 +1,6 @@
 "use client"
 
 import { useState } from "react"
-import Link from "next/link"
 import { Download, Menu, X } from "lucide-react"
 import { Drawer } from "./drawer"
 
